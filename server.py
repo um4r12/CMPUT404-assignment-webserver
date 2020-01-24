@@ -83,12 +83,6 @@ class MyWebServer(socketserver.BaseRequestHandler):
     def handle(self):
 
         self.close_connection = True
-        self.handle_one_request()
-        # while not self.close_connection:
-        #     self.handle_one_request()
-
-    def handle_one_request(self):
-
         self.raw_request = self.request.recv(1024).strip().decode()
         self.raw_request_crlf_rm = self.raw_request.split("\r\n")
         self.response_headers = []
@@ -99,7 +93,7 @@ class MyWebServer(socketserver.BaseRequestHandler):
         func_name = "do_" + self.request_method
         if not hasattr(self, func_name):
             self.send_error(405, self.RESPONSES[405])
-            return False
+            return
         func = getattr(self, func_name)
         func()
 
